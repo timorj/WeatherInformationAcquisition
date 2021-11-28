@@ -1,0 +1,15 @@
+C:\Users\LJY\source\repos\WeatherInformationAcquisition\WeatherInformationAcquisition\bin\Debug\WeatherInformationAcquisition.exe.config
+C:\Users\LJY\source\repos\WeatherInformationAcquisition\WeatherInformationAcquisition\bin\Debug\WeatherInformationAcquisition.exe
+C:\Users\LJY\source\repos\WeatherInformationAcquisition\WeatherInformationAcquisition\bin\Debug\WeatherInformationAcquisition.pdb
+C:\Users\LJY\source\repos\WeatherInformationAcquisition\WeatherInformationAcquisition\obj\Debug\WeatherInformationAcquisition.Form1.resources
+C:\Users\LJY\source\repos\WeatherInformationAcquisition\WeatherInformationAcquisition\obj\Debug\WeatherInformationAcquisition.Properties.Resources.resources
+C:\Users\LJY\source\repos\WeatherInformationAcquisition\WeatherInformationAcquisition\obj\Debug\WeatherInformationAcquisition.csproj.GenerateResource.cache
+C:\Users\LJY\source\repos\WeatherInformationAcquisition\WeatherInformationAcquisition\obj\Debug\WeatherInformationAcquisition.csproj.CoreCompileInputs.cache
+C:\Users\LJY\source\repos\WeatherInformationAcquisition\WeatherInformationAcquisition\obj\Debug\WeatherInformationAcquisition.exe
+C:\Users\LJY\source\repos\WeatherInformationAcquisition\WeatherInformationAcquisition\obj\Debug\WeatherInformationAcquisition.pdb
+C:\Users\LJY\source\repos\WeatherInformationAcquisition\WeatherInformationAcquisition\bin\Debug\Newtonsoft.Json.dll
+C:\Users\LJY\source\repos\WeatherInformationAcquisition\WeatherInformationAcquisition\bin\Debug\Newtonsoft.Json.xml
+C:\Users\LJY\source\repos\WeatherInformationAcquisition\WeatherInformationAcquisition\obj\Debug\WeatherInformationAcquisition.csproj.CopyComplete
+C:\Users\LJY\source\repos\WeatherInformationAcquisition\WeatherInformationAcquisition\obj\Debug\WeatherInformationAcquisition.csproj.AssemblyReference.cache
+C:\Users\LJY\source\repos\WeatherInformationAcquisition\WeatherInformationAcquisition\bin\Debug\DocumentFormat.OpenXml.dll
+C:\Users\LJY\source\repos\WeatherInformationAcquisition\WeatherInformationAcquisition\bin\Debug\DocumentFormat.OpenXml.xml
