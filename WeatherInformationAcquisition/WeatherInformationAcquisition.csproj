@@ -93,7 +93,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Resources\V1--城市信息列表_20210705.xlsx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "6cf95e40-7ed2-462d-96b9-ab8c473a21c0": {
+      "ProjectGuid": "6cf95e40-7ed2-462d-96b9-ab8c473a21c0",
+      "DisplayName": "WeatherInformationAcquisition",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}

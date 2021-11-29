@@ -12,10 +12,24 @@ using WeatherInformationAcquisition.DataManage;
 
 namespace WeatherInformationAcquisition.Src
 {
+    public enum RequestType
+    {
+        Forecast,
+        Condition
+    }
     class DataRequest
     {
         private const string host = "https://freecityid.market.alicloudapi.com";
-        private const string path = "/whapi/json/alicityweather/briefforecast3days";
+        /// <summary>
+        /// 精简预报3天
+        /// </summary>
+        private const string forecastPath = "/whapi/json/alicityweather/briefforecast3days";
+
+        /// <summary>
+        /// 精简实况
+        /// </summary>
+        private const string conditionPath = "/whapi/json/alicityweather/briefcondition";
+
         private const string method = "POST";
         //请求配置
         private const string appcode = "456e653469d74deda03dbf0dd81a4328";
@@ -25,12 +39,24 @@ namespace WeatherInformationAcquisition.Src
         /// </summary>
         /// <param name="cityID">城市ID,默认为2（北京市）</param>
         /// <returns>天气Json数据</returns>
-        public static string WeatherRequest(int cityID)
+        public static string WeatherRequest(RequestType requestType, int cityID)
         {           
             string querys = "";
             
             string bodys = $"cityId={cityID}&token=677282c2f1b3d718152c4e25ed434bc4";
-            string url = host + path;
+            string url = "";
+            switch (requestType)
+            {
+                case RequestType.Forecast:
+                    url = host + forecastPath;
+                    break;
+                case RequestType.Condition:
+                    url = host + conditionPath;
+                    break;
+                default:
+                    url = host + forecastPath;
+                    break;
+            }
             HttpWebRequest httpRequest = null;
             HttpWebResponse httpResponse = null;
 
@@ -77,10 +103,7 @@ namespace WeatherInformationAcquisition.Src
             return reader.ReadToEnd();
 
         }
-
     
-     
-
         public static bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
         {
             return true;

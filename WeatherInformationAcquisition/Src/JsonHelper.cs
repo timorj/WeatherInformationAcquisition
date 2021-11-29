@@ -24,14 +24,13 @@ namespace WeatherInformationAcquisition.Src
 
         public static object CreateInstanceFromJObect(JObject json)
         {
-            object result = default;
-
             GetAllProperties(json);
 
             var dataClasslist = CreateInstanceFrom(data);
 
-            result = DataToClass(dataClasslist);
-            return result;
+            List<object>  grouplist = DataToClass(dataClasslist);    
+            
+            return grouplist;
         }
 
         private static List<Tuple<string, string, string>> data = new List<Tuple<string, string, string>>();

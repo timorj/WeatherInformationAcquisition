@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -19,10 +20,7 @@ namespace WeatherInformationAcquisition.DataManage
 
         private static RequestResult result;
 
-        private static List<Tuple<string, int>> citiesData;
-
-       
-
+        private static List<Tuple<string, int>> citiesData;      
 
         static WeatherRequestSystem()
         {
@@ -44,6 +42,8 @@ namespace WeatherInformationAcquisition.DataManage
            
 
         }
+
+
         private static void GetCityID()
         {
             var excelData = Resources.城市ID列表;
@@ -81,13 +81,33 @@ namespace WeatherInformationAcquisition.DataManage
             return stream;
         }
         
-        public static void WeatherQuest()
+        public static void WeatherForcastQuest()
         {
-            result.JsonData = DataRequest.WeatherRequest(param.CityID);
-            result.Jobject = JsonHelper.ParseJson(result.JsonData);
+            result.ForecastJsonData = DataRequest.WeatherRequest(RequestType.Forecast, param.CityID);
 
-            result.Weather = JsonHelper.CreateInstanceFromJObect(result.Jobject);
+            result.ForecastJobject = JsonHelper.ParseJson(result.ForecastJsonData);
+
+            result.ForecastClass = JsonHelper.CreateInstanceFromJObect(result.ForecastJobject);
+
+            
+
+            result.ForecastWeather = new Weather(result.ForecastClass);
+
+            
         }
+
+        public static void WeatherConditionQuest()
+        {
+            result.ConditionJsonData = DataRequest.WeatherRequest(RequestType.Condition, param.CityID);
+
+            result.ConditionJobject = JsonHelper.ParseJson(result.ConditionJsonData);
+
+            result.ConditionClass = JsonHelper.CreateInstanceFromJObect(result.ConditionJobject);
+
+            result.ConditionWeather = new Weather(result.ConditionWeather);
+        }
+
+        
 
     }
 }
