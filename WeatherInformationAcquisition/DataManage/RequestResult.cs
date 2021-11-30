@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using WeatherInformationAcquisition.Src;
 
 namespace WeatherInformationAcquisition.DataManage
 {
@@ -96,6 +97,14 @@ namespace WeatherInformationAcquisition.DataManage
                 xz.Serialize(sw, forecastWeather);
             }
 
+        }
+
+        public void ExportDataAsDocx(string dir)
+        {
+            string fileName = Path.Combine(dir, "WeatherLog.docx");
+            string content = forecastWeather.ToString();
+
+            WordHelper.CreatWordDocument(fileName, content);
         }
 
 

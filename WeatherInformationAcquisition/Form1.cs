@@ -47,7 +47,28 @@ namespace WeatherInformationAcquisition
 
         private void btnDoc_Click(object sender, EventArgs e)
         {
+            if (WeatherRequestSystem.Result.ForecastWeather == null)
+            {
+                MessageBox.Show("未请求到任何数据");
+                return;
+            }
 
+            FolderBrowserDialog dlg = new FolderBrowserDialog();
+            FolderBrowserDialog dialog = new FolderBrowserDialog();
+            //打开的文件夹浏览对话框上的描述  
+            dialog.Description = "请选择一个文件夹";
+            //是否显示对话框左下角 新建文件夹 按钮，默认为 true  
+            dialog.ShowNewFolderButton = false;
+
+            //按下确定选择的按钮  
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                //记录选中的目录  
+                string dir = dialog.SelectedPath;
+                WeatherRequestSystem.Result.ExportDataAsDocx(dir);
+            }
+
+            MessageBox.Show("保存成功！");
         }
 
         private void btnTxt_Click(object sender, EventArgs e)

@@ -34,17 +34,15 @@ namespace WeatherInformationAcquisition.Src
 
             myAsmName.Name = "MyDynamicAssembly";
 
-            AssemblyBuilder myAsmBuilder = myDomain.DefineDynamicAssembly(myAsmName, AssemblyBuilderAccess.RunAndSave);
+            AssemblyBuilder myAsmBuilder = myDomain.DefineDynamicAssembly(myAsmName, AssemblyBuilderAccess.Run);
 
-            ModuleBuilder myModBuidler = myAsmBuilder.DefineDynamicModule(myAsmName.Name, myAsmName.Name + ".dll");
+            ModuleBuilder myModBuidler = myAsmBuilder.DefineDynamicModule(myAsmName.Name);
 
             TypeBuilder myTypeBuilder = myModBuidler.DefineType(classType.FullName, TypeAttributes.Public);
 
             AddPropertyToTypeBuilder(myTypeBuilder, lcpi);
 
             Type retval = myTypeBuilder.CreateType();
-
-            myAsmBuilder.Save(myAsmName.Name + ".dll");
 
             return retval;
         }
@@ -120,16 +118,15 @@ namespace WeatherInformationAcquisition.Src
             myAsmName.Name = "MyDynamicAssembly";
 
             //创建一个永久程序集
-            AssemblyBuilder myAsmBuilder = domain.DefineDynamicAssembly(myAsmName, System.Reflection.Emit.AssemblyBuilderAccess.RunAndSave);
+            AssemblyBuilder myAsmBuilder = domain.DefineDynamicAssembly(myAsmName, System.Reflection.Emit.AssemblyBuilderAccess.Run);
 
             //创建一个永久的单模程序块
-            ModuleBuilder myModBuilder = myAsmBuilder.DefineDynamicModule(myAsmName.Name, myAsmName.Name + ".dll");
+            ModuleBuilder myModBuilder = myAsmBuilder.DefineDynamicModule(myAsmName.Name);
             
             TypeBuilder myTypeBuilder = myModBuilder.DefineType(className, TypeAttributes.Public);
 
             //创建类型
             Type retval = myTypeBuilder.CreateType();
-            myAsmBuilder.Save(myAsmName + ".dll");
 
             return retval;
 
