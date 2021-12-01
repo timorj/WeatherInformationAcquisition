@@ -9,6 +9,7 @@ using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Web.Script.Serialization;
 using WeatherInformationAcquisition.DataManage;
+using HtmlAgilityPack;
 
 namespace WeatherInformationAcquisition.Src
 {
@@ -33,6 +34,10 @@ namespace WeatherInformationAcquisition.Src
         private const string method = "POST";
         //请求配置
         private const string appcode = "456e653469d74deda03dbf0dd81a4328";
+
+        private const string nmcHost = "http://www.nmc.cn";
+
+        private const string nmcPath = "/publish/forecast/ASC";
 
         /// <summary>
         /// 请求天气数据，并返回Joson数据
@@ -102,6 +107,52 @@ namespace WeatherInformationAcquisition.Src
             StreamReader reader = new StreamReader(st, Encoding.GetEncoding("utf-8"));
             return reader.ReadToEnd();
 
+        }
+
+        public static string WeatherRequestFromNMC(string cityName)
+        {
+            string result = string.Empty;
+
+            string url = nmcHost + nmcPath + "/batang.html";
+
+            HttpWebResponse httpResponse = null;
+
+            HttpWebRequest httpRequest = (HttpWebRequest)WebRequest.Create(url);
+      
+            try
+            {
+                httpResponse = (HttpWebResponse)httpRequest.GetResponse();
+            }
+            catch (WebException ex)
+            {
+                httpResponse = (HttpWebResponse)ex.Response;
+            }
+
+            Console.WriteLine(httpResponse.StatusCode);
+            Console.WriteLine(httpResponse.Method);
+            Console.WriteLine(httpResponse.Headers);
+            Stream st = httpResponse.GetResponseStream();
+            StreamReader reader = new StreamReader(st, Encoding.GetEncoding("utf-8"));
+
+            ParseHTMLText(reader.ReadToEnd());
+
+            
+            return reader.ReadToEnd();
+        }
+
+        public static string ParseHTMLText(string data)
+        {
+            string result = string.Empty;
+            HtmlDocument htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(data);
+
+            HtmlNode weatherNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='weather-header']");
+
+            HtmlNode weatherForecastNode = weatherNode.SelectSingleNode("//div[@class='7days day7 pull-right clearfix']");
+
+            HtmlNodeCollection weatherWrapNodes = weatherForecastNode.SelectNodes("//div[@class='weatherWrap']");
+
+            return result;
         }
     
         public static bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)

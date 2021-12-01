@@ -122,5 +122,10 @@ namespace WeatherInformationAcquisition
 
             MessageBox.Show("保存成功！");
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            WeatherRequestSystem.WeatherForecastQ();   
+        }
     }
 }

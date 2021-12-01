@@ -107,6 +107,12 @@ namespace WeatherInformationAcquisition.DataManage
             result.ConditionWeather = new Weather(result.ConditionWeather);
         }
 
+        public static void WeatherForecastQ()
+        {
+            string cityName = "batang";
+            string s = DataRequest.WeatherRequestFromNMC(cityName);
+        }
+
         
 
     }
