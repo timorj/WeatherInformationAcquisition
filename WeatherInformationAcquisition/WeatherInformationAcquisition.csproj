@@ -57,6 +57,17 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataManage\APIS\IWeatherRequest.cs" />
+    <Compile Include="DataManage\APIS\MojiWeather.cs" />
+    <Compile Include="DataManage\APIS\NMCWeather.cs" />
+    <Compile Include="DataManage\IWeather.cs" />
+    <Compile Include="DataManage\WeatherCity.cs" />
+    <Compile Include="DataManage\WeatherMonthHistory.cs" />
+    <Compile Include="DataManage\WeatherDayCondition.cs" />
+    <Compile Include="DataManage\WeatherDay.cs" />
+    <Compile Include="DataManage\WeatherHour.cs" />
+    <Compile Include="DataManage\WeatherNMC.cs" />
+    <Compile Include="DataManage\WeatherProvince.cs" />
     <Compile Include="DataManage\RequestParam.cs" />
     <Compile Include="DataManage\RequestResult.cs" />
     <Compile Include="DataManage\Weather.cs" />
@@ -74,6 +85,7 @@
     <Compile Include="Src\ExcelHelper.cs" />
     <Compile Include="Src\JsonHelper.cs" />
     <Compile Include="Src\WordHelper.cs" />
+    <Compile Include="Utils\ClassTools.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -103,6 +115,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\城市ID列表.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\cities.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

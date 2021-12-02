@@ -5,11 +5,12 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using WeatherInformationAcquisition.Utils;
 
 namespace WeatherInformationAcquisition.DataManage
 {
     [Serializable]
-    public class Weather
+    public class Weather:IWeather
     {
         private string name;
         private string pname;
@@ -127,39 +128,9 @@ namespace WeatherInformationAcquisition.DataManage
 
         public override string ToString()
         {
-            string result = string.Empty;
-
-            PropertyInfo[] origin = this.GetType().GetProperties();
-
-            foreach (PropertyInfo prop in origin)
-            {
-                result += prop.GetCustomAttribute<PropertyNickNameAttribute>().NickName + ":" + prop.GetValue(this) + "\r\n";
-            }
-
-            return result;
+            return ClassTools.ClassToString(this);
         }
     }
 
-    [System.AttributeUsage(AttributeTargets.All, Inherited = false, AllowMultiple = true)]
-    sealed class PropertyNickNameAttribute : Attribute
-    {
-        // See the attribute guidelines at 
-        //  http://go.microsoft.com/fwlink/?LinkId=85236
-        readonly string nickName;
-
-        // This is a positional argument
-        public PropertyNickNameAttribute(string nickName)
-        {
-            this.nickName = nickName;
-
-        }
-
-        public string NickName
-        {
-            get { return nickName; }
-        }
-
-        // This is a named argument
-        public int NamedInt { get; set; }
-    }
+    
 }

@@ -37,14 +37,14 @@ namespace WeatherInformationAcquisition.Src
 
         private const string nmcHost = "http://www.nmc.cn";
 
-        private const string nmcPath = "/publish/forecast/ASC";
+        private const string nmcPath = "/publish/forecast/";
 
         /// <summary>
         /// 请求天气数据，并返回Joson数据
         /// </summary>
         /// <param name="cityID">城市ID,默认为2（北京市）</param>
         /// <returns>天气Json数据</returns>
-        public static string WeatherRequest(RequestType requestType, int cityID)
+        public static string WeatherRequest(RequestType requestType, string cityID)
         {           
             string querys = "";
             
@@ -109,16 +109,20 @@ namespace WeatherInformationAcquisition.Src
 
         }
 
-        public static string WeatherRequestFromNMC(string cityName)
+        public static string WeatherRequestFromNMC(string cityID)
         {
-            string result = string.Empty;
+            
+            string url = "http://www.nmc.cn/rest/weather?stationid=" + cityID;
 
-            string url = nmcHost + nmcPath + "/batang.html";
+            return ParseHttpsData(url);
+        }
 
+        private static string ParseHttpsData(string url)
+        {
             HttpWebResponse httpResponse = null;
 
             HttpWebRequest httpRequest = (HttpWebRequest)WebRequest.Create(url);
-      
+
             try
             {
                 httpResponse = (HttpWebResponse)httpRequest.GetResponse();
@@ -128,16 +132,28 @@ namespace WeatherInformationAcquisition.Src
                 httpResponse = (HttpWebResponse)ex.Response;
             }
 
-            Console.WriteLine(httpResponse.StatusCode);
-            Console.WriteLine(httpResponse.Method);
-            Console.WriteLine(httpResponse.Headers);
             Stream st = httpResponse.GetResponseStream();
             StreamReader reader = new StreamReader(st, Encoding.GetEncoding("utf-8"));
 
-            ParseHTMLText(reader.ReadToEnd());
 
-            
             return reader.ReadToEnd();
+        }
+
+        public static string ProvincesRequestFromNMC() 
+        {
+            string provinceUrl = "http://www.nmc.cn/rest/province/all";
+
+            return ParseHttpsData(provinceUrl);
+        
+        }
+
+        public static string CityCodeRequestFromNMC(string provinceCode)
+        {
+            string host1 = "http://www.nmc.cn/rest/province/";
+            string path = provinceCode;
+            string cityUrl = host1 + path;
+
+            return ParseHttpsData(cityUrl);
         }
 
         public static string ParseHTMLText(string data)
@@ -147,6 +163,10 @@ namespace WeatherInformationAcquisition.Src
             htmlDoc.LoadHtml(data);
 
             HtmlNode weatherNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='weather-header']");
+
+            HtmlNodeCollection weatherItems = weatherNode.SelectNodes("//div[@class='real-item']");
+
+            HtmlNode realRain = weatherItems[0].SelectSingleNode("//div[@id='realRain']");
 
             HtmlNode weatherForecastNode = weatherNode.SelectSingleNode("//div[@class='7days day7 pull-right clearfix']");
 

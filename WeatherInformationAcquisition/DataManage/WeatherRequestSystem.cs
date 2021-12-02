@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
+using WeatherInformationAcquisition.DataManage.APIS;
 using WeatherInformationAcquisition.Properties;
 using WeatherInformationAcquisition.Src;
 
@@ -20,7 +21,7 @@ namespace WeatherInformationAcquisition.DataManage
 
         private static RequestResult result;
 
-        private static List<Tuple<string, int>> citiesData;      
+        public static IWeatherRequest RequestMethod;
 
         static WeatherRequestSystem()
         {
@@ -28,92 +29,31 @@ namespace WeatherInformationAcquisition.DataManage
             result = new RequestResult();
         }
 
+        #region 墨迹天气
+
         /// <summary>
         /// 从城市列表中获取城市ID
         /// </summary>
         public static void CityIDRequest()
         {
-            GetCityID();
-
-            var city = citiesData.FirstOrDefault(g => g.Item1 == Param.City);
-            
-            if(city != null)
-            Param.CityID = city.Item2;
-           
-
+            param.CityCode = RequestMethod.CityIDRequest(param.City);
         }
 
-
-        private static void GetCityID()
+        public static void WeatherForcastQuest() 
         {
-            var excelData = Resources.城市ID列表;
-
-            byte[] excels = Encoding.UTF8.GetBytes(excelData);
-
-            Stream stream = BytesToStream(excels);
-            StreamReader reader = new StreamReader(stream);
-            List<string> data = new List<string>();
-            while (!reader.EndOfStream)
-            {
-                data.Add(reader.ReadLine());
-            }
-            reader.Close();
-
-            //去掉表头
-            data = data.Skip(1).ToList();
-
-            List<Tuple<string, int>> cities = new List<Tuple<string, int>>();
-
-            data.ForEach(g =>
-            {
-                var array = g.Split('\t');
-                Tuple<string, int> temp = Tuple.Create(array[1], int.Parse(array[0]));
-                cities.Add(temp);
-            }
-            );
-
-            citiesData = cities;
-        }
-
-        private static Stream BytesToStream(byte[] data)
-        {
-            MemoryStream stream = new MemoryStream(data);
-            return stream;
-        }
-        
-        public static void WeatherForcastQuest()
-        {
-            result.ForecastJsonData = DataRequest.WeatherRequest(RequestType.Forecast, param.CityID);
-
-            result.ForecastJobject = JsonHelper.ParseJson(result.ForecastJsonData);
-
-            result.ForecastClass = JsonHelper.CreateInstanceFromJObect(result.ForecastJobject);
-
-            
-
-            result.ForecastWeather = new Weather(result.ForecastClass);
-
-            
+            var forecast = RequestMethod.WeatherForcastQuest(Param);
+            result.ForecastJsonData = forecast.Item1;
+            result.ForecastWeather = forecast.Item2;
         }
 
         public static void WeatherConditionQuest()
         {
-            result.ConditionJsonData = DataRequest.WeatherRequest(RequestType.Condition, param.CityID);
-
-            result.ConditionJobject = JsonHelper.ParseJson(result.ConditionJsonData);
-
-            result.ConditionClass = JsonHelper.CreateInstanceFromJObect(result.ConditionJobject);
-
-            result.ConditionWeather = new Weather(result.ConditionWeather);
+            
         }
 
-        public static void WeatherForecastQ()
-        {
-            string cityName = "batang";
-            string s = DataRequest.WeatherRequestFromNMC(cityName);
-        }
+        #endregion
 
-        
+       
 
     }
 }

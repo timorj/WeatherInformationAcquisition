@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using WeatherInformationAcquisition.Src;
+using WeatherInformationAcquisition.Utils;
 
 namespace WeatherInformationAcquisition.DataManage
 {
@@ -19,7 +20,7 @@ namespace WeatherInformationAcquisition.DataManage
 
         private object forecastClass;
 
-        private Weather forecastWeather;
+        private IWeather forecastWeather;
 
         /// <summary>
         /// 请求到的精简3天的json数据
@@ -38,7 +39,7 @@ namespace WeatherInformationAcquisition.DataManage
         /// <summary>
         /// 需要自定义获取的数据
         /// </summary>
-        public Weather ForecastWeather { get => forecastWeather; set => forecastWeather = value; }
+        public IWeather ForecastWeather { get => forecastWeather; set => forecastWeather = value; }
 
 
         private string conditionJsonData;
@@ -78,13 +79,9 @@ namespace WeatherInformationAcquisition.DataManage
             string fileName = Path.Combine(dir, "WeatherLog.txt");
             using (FileStream stream = new FileStream(fileName, FileMode.OpenOrCreate))
             {
-                PropertyInfo[] props = forecastWeather.GetType().GetProperties();
-                foreach (PropertyInfo prop in props)
-                {
-                    string line = prop.GetCustomAttribute<PropertyNickNameAttribute>().NickName + $"({prop.Name}):" + prop.GetValue(forecastWeather) + "\n";
-                    byte[] data = Encoding.UTF8.GetBytes(line);
-                    stream.Write(data, 0, data.Length);
-                }
+           
+                byte[] data = Encoding.UTF8.GetBytes(forecastWeather.ToString());
+                stream.Write(data, 0, data.Length);
             }
         }
 
@@ -93,7 +90,7 @@ namespace WeatherInformationAcquisition.DataManage
             string fileName = Path.Combine(dir, "WeatherLog.xml");
             using (StreamWriter sw = new StreamWriter(fileName))
             {
-                XmlSerializer xz = new XmlSerializer(typeof(Weather));
+                XmlSerializer xz = new XmlSerializer(forecastWeather.GetType());
                 xz.Serialize(sw, forecastWeather);
             }
 

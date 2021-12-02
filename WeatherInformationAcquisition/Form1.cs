@@ -9,23 +9,36 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WeatherInformationAcquisition.DataManage;
+using WeatherInformationAcquisition.DataManage.APIS;
 using WeatherInformationAcquisition.Src;
 
 namespace WeatherInformationAcquisition
 {
     public partial class Form1 : Form
     {
-        
+        private IWeatherRequest requestMethod = new NMCWeather();
+        private IWeatherRequest[] methods ={ new NMCWeather(), new MojiWeather() };
+        public IWeatherRequest RequestMethod
+        {
+            get => requestMethod; set
+            {
+                if (value != null)
+                {
+                    requestMethod = value;
+                    WeatherRequestSystem.RequestMethod = requestMethod;
+                }
+            }
+        }
         public Form1()
         {
-            InitializeComponent();
+            InitializeComponent();           
         }
 
 
         private void btnReq_Click(object sender, EventArgs e)
         {
 
-            if (WeatherRequestSystem.Param.CityID == default)
+            if (WeatherRequestSystem.Param.CityCode == default)
             {
                 MessageBox.Show("未能找到该城市！");
                 return;
@@ -125,7 +138,18 @@ namespace WeatherInformationAcquisition
 
         private void button1_Click(object sender, EventArgs e)
         {
-            WeatherRequestSystem.WeatherForecastQ();   
+      
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            comboBox1.Items.AddRange(methods);
+            comboBox1.SelectedIndex = 0;
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RequestMethod = (IWeatherRequest)comboBox1.SelectedItem;
         }
     }
 }

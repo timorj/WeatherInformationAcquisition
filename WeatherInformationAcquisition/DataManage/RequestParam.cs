@@ -9,20 +9,18 @@ namespace WeatherInformationAcquisition.DataManage
     public class RequestParam
     {
  
-        private int cityID;
-        /// <summary>
-        /// 请求的城市ID默认为2，北京市
-        /// </summary>
-        public int CityID { get => cityID; set => cityID = value; }
         public string City { get => city; set => city = value; }
 
         private string city;
 
+        private string cityCode;
+        public string CityCode { get => cityCode; set => cityCode = value; }
+
         
         public RequestParam()
         {
-            cityID = default;
             city = String.Empty;
+            cityCode = String.Empty;
         }
     }
 }

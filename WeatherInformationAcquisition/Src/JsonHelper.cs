@@ -5,6 +5,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
+using WeatherInformationAcquisition.DataManage;
 using static WeatherInformationAcquisition.Src.ClassHelper;
 
 namespace WeatherInformationAcquisition.Src
@@ -96,8 +98,7 @@ namespace WeatherInformationAcquisition.Src
             
             return classes;
         }
-        
-      
+           
         private static List<object> DataToClass(List<object> clas)
         {
             List<object> result = new List<object>();
@@ -122,6 +123,128 @@ namespace WeatherInformationAcquisition.Src
             }
             return result;
         }
+
+        public static T ParseJsonData<T>(string jsonData, Func<string, T> getData)
+        {
+            return getData(jsonData);
+        }
+
+        public static List<WeatherProvince> ParseProvince(string jsonData)
+        {
+            List<WeatherProvince> provinces = new List<WeatherProvince>();
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+
+            dynamic pros = serializer.Deserialize<dynamic>(jsonData);
+
+            foreach (var item in pros)
+            {
+                WeatherProvince province = new WeatherProvince();
+                province.Code = item["code"];
+                province.Name = item["name"];
+                province.Url = item["url"];
+                provinces.Add(province);
+            }
+            return provinces;
+        }
+
+     
+        public static List<WeatherCity> ParseCity(string jsonData)
+        {
+            List<WeatherCity> cities = new List<WeatherCity>();
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+
+            dynamic pros = serializer.Deserialize<dynamic>(jsonData);
+
+            foreach (var item in pros)
+            {
+                WeatherCity city = new WeatherCity();
+                city.Code = item["code"];
+                city.City = item["city"];
+                city.Province = item["province"];
+                city.Url = item["url"];
+                cities.Add(city);
+            }
+            return cities;
+        }
+
+        public static WeatherNMC ParseWeather(string jsonData)
+        {
+            WeatherNMC weather = new WeatherNMC();
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+
+            dynamic pros = serializer.Deserialize<dynamic>(jsonData);
+
+            dynamic data = pros["data"];
+            dynamic real = data["real"];
+
+            dynamic station = real["station"];
+
+            weather.Province = station["province"];
+
+            weather.City = station["city"];
+
+            weather.PushTime = real["publish_time"];
+
+            WeatherDayCondition condition = new WeatherDayCondition();
+
+            dynamic con = real["weather"];
+
+            condition.MaxTemp = con["temperature"].ToString();
+
+            condition.MinTemp = con["temperatureDiff"].ToString();
+
+            condition.Rain = con["rain"].ToString();
+
+            condition.Info = con["info"];
+
+            weather.WeatherDay = condition;
+
+            dynamic tempchart = data["tempchart"];
+
+            foreach (dynamic item in tempchart)
+            {
+                WeatherDay day = new WeatherDay();
+
+                day.MaxTemp = item["max_temp"].ToString();
+                day.MinTemp = item["min_temp"].ToString();
+                day.Date = item["time"];
+
+                weather.Weather14Days.Add(day);
+            }
+
+            dynamic passedchart = data["passedchart"];
+
+            foreach (dynamic item in passedchart)
+            {
+                WeatherHour hour = new WeatherHour();
+
+                hour.Rain = item["rain1h"].ToString();
+                hour.Temp = item["temperature"].ToString();
+                hour.Time = item["time"];
+
+                weather.WeatherOneDay.Add(hour);
+            }
+
+            dynamic climate = data["climate"];
+            dynamic months = climate["month"];
+
+            foreach (dynamic item in months)
+            {
+                WeatherMonthHistory month = new WeatherMonthHistory();
+
+                month.Rain = item["precipitation"].ToString();
+
+                month.MaxTemp = item["maxTemp"].ToString();
+
+                month.MinTemp = item["minTemp"].ToString();
+
+                month.Month = item["month"].ToString();
+
+                weather.WeatherHistory.Add(month);
+            }
+            return weather;
+        }
+
 
     }
 }
